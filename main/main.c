@@ -6,42 +6,11 @@
 #include "freertos/task.h"
 #include "freertos/queue.h"
 #include "driver/gpio.h"
+#include "input.h"
 
 #define BUTTON_INPUT GPIO_NUM_2
 #define ESP_INTR_FLAG_DEFAULT 0
 #define BUZZER_OUTPUT GPIO_NUM_5
-
-#define NUM_BUT_POLLS_PUSHED 3
-#define NUM_BUT_POLLS_RELEASED 4
-
-enum butStates {RELEASED = 0, PUSHED, NO_CHANGE};
-static bool but_state = 0;	// Corresponds to the electrical state
-static uint8_t but_count = 0;
-
-bool* getButtonState()
-{
-    return &but_state;
-}
-
-void 
-updateButton(void)
-{
-    bool but_value = gpio_get_level(BUTTON_INPUT);
-    if (but_value != but_state) {
-        but_count++;
-        if (but_value == PUSHED && but_count >= NUM_BUT_POLLS_PUSHED) {
-            but_state = but_value;
-        } else if (but_value == RELEASED && but_count >= NUM_BUT_POLLS_RELEASED) {
-            but_state = but_value;
-            but_count = 0;
-        } else if (but_value == PUSHED) {
-            vTaskDelay(10 / portTICK_PERIOD_MS);
-            updateButton();
-        }
-    } else {
-        but_count = 0;
-    }
-}
 
 static QueueHandle_t gpio_evt_queue = NULL;
 
