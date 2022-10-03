@@ -44,20 +44,6 @@ void app_main(void)
     .pull_down_en = 0
     };    //change gpio interrupt type for one pin
     gpio_config(&out_conf);
-    
-    gpio_config_t in_conf = {
-    //interrupt of rising edge
-    .intr_type = GPIO_INTR_ANYEDGE,
-    //bit mask of the pins, use GPIO4/5 here
-    .pin_bit_mask = (1<<BUTTON_INPUT),
-    //set as input mode
-    .mode = GPIO_MODE_INPUT,
-    //disable pull-up mode
-    .pull_up_en = 0,
-    //enable pull-down mode
-    .pull_down_en = 1
-    };
-    gpio_config(&in_conf);
 
     //create a queue to handle gpio event from isr
     gpio_evt_queue = xQueueCreate(10, sizeof(uint32_t));
@@ -70,7 +56,6 @@ void app_main(void)
     gpio_isr_handler_add(BUTTON_INPUT, gpio_isr_handler, (void*) BUTTON_INPUT);
 
     while(1) {
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
         if (!(*getButtonState())) {
             printf("door open\n");
             gpio_set_level(BUZZER_OUTPUT, 1);
