@@ -7,7 +7,8 @@
 // Last modified:  3.10.2022
 // 
 // *******************************************************
-
+#ifndef BUZZER_H_
+#define BUZZER_H_
 #include <stdint.h>
 #include <stdbool.h>
 

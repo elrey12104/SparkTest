@@ -7,6 +7,9 @@
 // Last modified:  3.10.2022
 // 
 // *******************************************************
+#ifndef INPUT_H_
+#define INPUT_H_
+#include <stdbool.h>
 
 #define NUM_BUT_POLLS_PUSHED 3
 #define NUM_BUT_POLLS_RELEASED 4
@@ -17,6 +20,9 @@
 void
 initButton (void);
 
+bool*
+getButtonState (void);
+
 void
 updateButton(void); 
-#endif /*INPUTS_H_*/
+#endif /*INPUT_H_*/
