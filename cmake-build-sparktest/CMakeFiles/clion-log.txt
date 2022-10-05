@@ -1,0 +1,9 @@
+/opt/clion/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/opt/clion/bin/ninja/linux/ninja -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -G Ninja -S /home/jacobe/SparkTest -B /home/jacobe/SparkTest/cmake-build-sparktest
+CMake Error at CMakeLists.txt:3 (include):
+  include could not find requested file:
+
+    /tools/cmake/project.cmake
+
+
+-- Configuring incomplete, errors occurred!
+See also "/home/jacobe/SparkTest/cmake-build-sparktest/CMakeFiles/CMakeOutput.log".

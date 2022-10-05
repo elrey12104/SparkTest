@@ -1,0 +1,11 @@
+
+#
+# Google IoT Core Configuration
+#
+CONFIG_GIOT_PROJECT_ID="test-technique-315904"
+CONFIG_GIOT_LOCATION="asia-east1"
+CONFIG_GIOT_REGISTRY_ID="fridge-open-notif"
+CONFIG_GIOT_DEVICE_ID="esp32"
+# CONFIG_GIOT_DEBUG_OUTPUT is not set
+CONFIG_CONFIG_ESP_TLS_PSK_VERIFICATION=y
+# end of Google IoT Core Configuration

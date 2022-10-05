@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "wifi_station.h": "c",
+        "iotc_backoff_status_api.h": "c",
+        "iotc_backoff_lut_config.h": "c",
+        "compare": "c"
+    }
+}

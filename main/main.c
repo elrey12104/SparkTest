@@ -7,9 +7,13 @@
 #include "freertos/queue.h"
 #include "driver/gpio.h"
 #include "driver/gptimer.h"
+#include "nvs_flash.h"
+
 #include "input.h"
 #include "buzzer.h"
 #include "timer.h"
+#include "wifi_station.h"
+#include "dht11.c"
 
 #define BUTTON_INPUT GPIO_NUM_2
 #define ESP_INTR_FLAG_DEFAULT 0
@@ -24,7 +28,7 @@ typedef struct {
 } example_queue_element_t;
 
 static bool IRAM_ATTR
-example_timer_on_alarm_cb(gptimer_handle_t timer, const gptimer_alarm_event_data_t *edata, void *user_ctx) {
+timer_isr_handler(gptimer_handle_t timer, const gptimer_alarm_event_data_t *edata, void *user_ctx) {
     BaseType_t high_task_awoken = pdFALSE;
     QueueHandle_t queue = (QueueHandle_t)user_ctx;
     // Stop timer the sooner the better
@@ -38,7 +42,6 @@ example_timer_on_alarm_cb(gptimer_handle_t timer, const gptimer_alarm_event_data
     // return whether we need to yield at the end of ISR
     return high_task_awoken == pdTRUE;
 }
-
 void
 timer_isr_task(void* arg) {
     uint32_t clk_cnt;
@@ -71,7 +74,7 @@ button_isr_task(void* arg) {
 void 
 timerIntHandler(void) {
     gptimer_event_callbacks_t cbs = {
-        .on_alarm = example_timer_on_alarm_cb, // register user callback
+        .on_alarm = timer_isr_handler, // register user callback
     };
     queue = xQueueCreate(10, sizeof(uint32_t));
     xTaskCreate(timer_isr_task, "timer_task_example", 2048, NULL, 10, NULL);
@@ -90,19 +93,35 @@ gpioIntHandler(void) {
     gpio_isr_handler_add(BUTTON_INPUT, gpio_isr_handler, (void*) BUTTON_INPUT);
 }
 
+void 
+initNVS(void)
+{
+    //Initialize NVS
+    esp_err_t ret = nvs_flash_init();
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+      ESP_ERROR_CHECK(nvs_flash_erase());
+      ret = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK(ret);
+}
+
 void app_main(void)
 {
     initButton();
     initBuzzer();
     initTimer(&gptimer);
-
+    initNVS();
+    initWifi();
+    DHT11_init(GPIO_NUM_4);
     timerIntHandler();
     gpioIntHandler();
-
+    struct dht11_reading reading;
     bool* butState = getButtonState();
     while(1) {
         if (!(*butState)) resetRestartTimer(gptimer);
         else stopTimer(gptimer);
+        reading = DHT11_read();
+        printf("Temp %f | Humidity %f | Error %d\n", reading.temperature, reading.humidity, reading.status);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }

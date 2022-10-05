@@ -19,6 +19,7 @@
 
 #include "input.h"
 #define BUTTON_INPUT GPIO_NUM_2
+#define BUTTON_OUTPUT GPIO_NUM_0
 
 enum butStates {RELEASED = 0, PUSHED, NO_CHANGE};
 static bool but_state = 0;	// Corresponds to the electrical state
@@ -40,6 +41,21 @@ initButton(void)
     .pull_down_en = 1
     };
     gpio_config(&in_conf);
+
+    gpio_config_t out_conf = {
+    //interrupt of rising edge
+    .intr_type = GPIO_INTR_DISABLE,
+    //bit mask of the pins, use GPIO4/5 here
+    .pin_bit_mask = (1<<BUTTON_OUTPUT),
+    //set as input mode
+    .mode = GPIO_MODE_OUTPUT,
+    //disable pull-up mode
+    .pull_up_en = 0,
+    //enable pull-down mode
+    .pull_down_en = 0
+    };
+    gpio_config(&out_conf);
+    gpio_set_level(BUTTON_OUTPUT, 1);
 }
 
 bool* getButtonState()
