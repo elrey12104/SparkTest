@@ -26,7 +26,7 @@
    the config you want - ie #define EXAMPLE_WIFI_SSID "mywifissid"
 */
 #define EXAMPLE_ESP_WIFI_SSID      "House of Jank 2.4"
-#define EXAMPLE_ESP_WIFI_PASS      "123321GreenFridge"
+#define EXAMPLE_ESP_WIFI_PASS      "BLANK"
 #define EXAMPLE_ESP_MAXIMUM_RETRY  5
 #define EXAMPLE_BROKER_URI "mqtt://mqtt.eclipse.org"//mqtts://mqtt.googleapis.com"
 /* FreeRTOS event group to signal when we are connected*/
