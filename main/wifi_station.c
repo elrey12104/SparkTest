@@ -35,7 +35,7 @@ const esp_http_client_config_t config = {
     .url = "https://cloudiotdevice.googleapis.com/v1/projects/test-technique-315904/",
     .auth_type = HTTP_AUTH_TYPE_BASIC,
     .username = NULL,
-    .password="eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NjQ5MjgxNDUsImV4cCI6MTY2NDkyOTM0NSwiYXVkIjoidGVzdC10ZWNobmlxdWUtMzE1OTA0In0.HFtJ20Cpxw4HUpsDUR34AypV8YOZAfAuDwignqJ4z69a8nQm0E8Pn-LQrWnRz8fyX08RUYVdM_B0U7T1p__C1A",
+    .password="",
     .path = "locations/asia-east1/registries/fridge-open-notif/devices/esp32:publishEvent"
 };
 const char* TAG = "WIFI";
